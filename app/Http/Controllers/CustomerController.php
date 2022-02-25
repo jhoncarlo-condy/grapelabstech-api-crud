@@ -14,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::latest()->get();
+        return $customers;
     }
 
     /**
@@ -35,7 +36,31 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'birthdate'  => 'required',
+            'gender'     => 'required|numeric|min:1|max:3'
+        ]);
+
+        $added_customer = Customer::insert([
+            'first_name' => $validated['first_name'],
+            'last_name'  => $validated['last_name'],
+            'birthdate'  => $validated['birthdate'],
+            'gender'     => $validated['gender']
+        ]);
+
+        ///or simply this query
+        //Customer::create($validated);
+
+        if($added_customer){
+
+            return response()->json([
+                'status_code'    => '1',
+                'status_message' => 'Customer Successfully Created'
+            ],201);
+        }
+
     }
 
     /**
@@ -69,7 +94,19 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+
+        $validated = $request->validate([
+            'gender'     => 'numeric|min:1|max:3'
+        ]);
+
+        if($customer->update($validated)){
+            return response()->json([
+                'status_code'    => '1',
+                'status_message' => 'Successfully Updated',
+                'customer'       => $customer
+            ]);
+        }
+
     }
 
     /**
@@ -80,6 +117,11 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        if($customer->delete()){
+            return response()->json([
+                'status_code'    => '1',
+                'status_message' => 'Deleted Successfully'
+            ]);
+        }
     }
 }
