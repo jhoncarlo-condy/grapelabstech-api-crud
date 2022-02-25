@@ -21,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::resource('customers',CustomerController::class);
+
+//test api for saloon
+Route::get('customer_list',[CustomerController::class,'customer_list']);
+Route::get('sample',[CustomerController::class,'sample']);

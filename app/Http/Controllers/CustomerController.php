@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Integrations\api\CustomerConnector;
+use App\Http\Integrations\api\Requests\GetCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Sammyjo20\SaloonLaravel\Facades\Saloon;
+use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Http\SaloonConnector;
+
 
 class CustomerController extends Controller
 {
@@ -71,7 +77,11 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return response()->json([
+            'status_code'    => '1',
+            'status_message' => 'Success',
+            'customer'       => $customer
+        ]);
     }
 
     /**
@@ -123,5 +133,61 @@ class CustomerController extends Controller
                 'status_message' => 'Deleted Successfully'
             ]);
         }
+    }
+
+    public function customer_list(){
+        $customers = Customer::latest()->get();
+        return response()->json([
+            'status_code'    => '1',
+            'status_message' => 'Success',
+            'customers'      => $customers
+        ],200);
+    }
+
+    public function sample(){
+        // return 'test';
+        // $connector = new CustomerConnector();
+        // $request = $connector->getCustomerRequest();
+        // $response = $request->send();
+        // $response->throw();
+        // $data = $response->json();
+        // return $data;
+
+
+        //
+        // $request = CustomerConnector::GetCustomerResponse();
+        // $response = $request->send();
+        // $response->throw();
+        // $data = $response->json();
+        // return $data;
+
+        //
+        $request = new GetCustomerRequest();
+        $response = $request->send();
+        $data = $response->json();
+        return $data;
+
+        //
+        // $response = (new GetCustomerRequest)->connectorMethod()->send();
+        // $data = $response->json();
+        // return $data;
+
+        // $response = (new GetCustomerRequest)->send();
+        // $response->throw();
+        // $data = $response->json();
+        // return $data;
+
+        // Saloon::fake([
+        //     new MockResponse(['name' => 'Sam'], 200),
+        //     new MockResponse(['name' => 'Alex'], 200),
+        //     new MockResponse(['error' => 'Server Unavailable'], 500),
+        // ]);
+
+        // $test  = (new GetCustomerRequest)->send();
+        // $test1 = (new GetCustomerRequest)->send();
+        // $test2 = (new GetCustomerRequest)->send();
+
+        // $data = $test->json();
+        // return $data;
     }
 }
