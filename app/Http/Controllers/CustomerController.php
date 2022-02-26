@@ -154,10 +154,10 @@ class CustomerController extends Controller
                 'gender'     => $request->gender ? $data['gender'] : $customer->gender,
             ]);
 
+
             return response()->json([
                 'status_code'    => '1',
                 'status_message' => 'Successfully Updated',
-                'customer'       => $customer
             ]);
 
         } catch (\Throwable $th) {

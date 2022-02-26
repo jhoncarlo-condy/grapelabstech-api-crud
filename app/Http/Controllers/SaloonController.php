@@ -9,6 +9,7 @@ use App\Http\Integrations\api\Requests\GetCustomerRequest;
 use App\Http\Integrations\api\Requests\UpdateCustomerRequest;
 use App\Http\Integrations\api\Requests\ViewCustomerDetailsRequest;
 use App\Models\Customer;
+use Validator;
 
 
 class SaloonController extends Controller
