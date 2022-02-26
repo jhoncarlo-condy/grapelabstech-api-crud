@@ -3,15 +3,17 @@
 namespace App\Http\Integrations\api;
 
 use App\Http\Integrations\api\Requests\GetCustomerRequest;
-use App\Http\Integrations\api\Responses\CustomerResponse;
+use App\Http\Integrations\api\Requests\AddCustomerRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+use Sammyjo20\Saloon\Traits\Features\AlwaysThrowsOnErrors;
 use Sammyjo20\Saloon\Traits\Features\DisablesSSLVerification;
 
 class CustomerConnector extends SaloonConnector
 {
     // use AcceptsJson;
-    use DisablesSSLVerification;
+    // use DisablesSSLVerification;
+    // use AlwaysThrowsOnErrors;
 
 
     /**
@@ -23,6 +25,7 @@ class CustomerConnector extends SaloonConnector
 
     protected array $requests = [
         'get_key' => GetCustomerRequest::class,
+        'add_key' => AddCustomerRequest::class,
     ];
 
     /**
@@ -33,7 +36,7 @@ class CustomerConnector extends SaloonConnector
     public function defineBaseUrl(): string
     {
         // return 'https://jsonplaceholder.typicode.com';
-        return 'http://apicrud.test/';
+        return 'http://apicrud.test/api';
     }
 
     /**
@@ -43,6 +46,8 @@ class CustomerConnector extends SaloonConnector
      */
     public function defaultHeaders(): array
     {
-        return [];
+        return [
+
+        ];
     }
 }

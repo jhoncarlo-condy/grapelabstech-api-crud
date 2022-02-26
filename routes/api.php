@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SaloonController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +21,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('login',[LoginController::class,'login']);
+
+Route::prefix('admin')->group(function(){
+    Route::post('/login',[LoginController::class,'login']);
+    Route::post('/logout',[LoginController::class,'logout']);
+    Route::get('/refresh',[LoginController::class,'refresh']);
+});
 
 Route::middleware('jwt.auth')->resource('customers',CustomerController::class);
 
 //test api for saloon
-Route::get('customer_list',[CustomerController::class,'customer_list']);
-Route::get('sample',[CustomerController::class,'sample']);
+Route::get('customer_list',[SaloonController::class,'customer_list']);
+Route::get('add_customer',[SaloonController::class,'add_customer']);

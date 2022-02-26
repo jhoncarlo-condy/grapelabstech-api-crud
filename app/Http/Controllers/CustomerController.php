@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Integrations\api\CustomerConnector;
 use App\Http\Integrations\api\Requests\GetCustomerRequest;
+use App\Http\Integrations\api\Requests\AddCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Sammyjo20\SaloonLaravel\Facades\Saloon;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\SaloonConnector;
 
 
 class CustomerController extends Controller
@@ -135,71 +132,5 @@ class CustomerController extends Controller
         }
     }
 
-    public function customer_list(){
-        $customers = Customer::latest()->get();
 
-        return response()->json($customers,200);
-    }
-
-    public function sample(){
-        // return 'test';
-        // $connector = new CustomerConnector();
-        // $request = $connector->get_key();
-        // $response = $request->send();
-        // // $response->throw();
-        // $data = $response->json();
-        // return $data;
-
-
-
-        // $request = CustomerConnector::get_key();
-        // $response = $request->send();
-        // // $response->throw();
-        // $data = $response->json();
-        // return $data;
-
-        //
-        // $request  = new GetCustomerRequest();
-        // // dd($request);
-        // $response = $request->send();
-        // // $response->throw();
-        // $data     = $response->json();
-        // return $data;
-
-        $request = new GetCustomerRequest();
-        $response = $request->send();
-        $data     = $response->json();
-        return $data;
-
-        // $response = (new GetCustomerRequest)->connectorMethod()->send();
-        // $data = $response->json();
-        // return $data;
-
-        // $response = (new GetCustomerRequest)->send();
-        // // $response->throw();
-        // $response->getGuzzleException();
-        // $data = json_decode($response->json());
-        // return $data;
-
-
-        // Saloon::fake([
-        //     new MockResponse(['name' => 'Sam'], 200),
-        //     new MockResponse(['name' => 'Alex'], 200),
-        //     new MockResponse(['error' => 'Server Unavailable'], 500),
-        // ]);
-
-        // $test  = (new GetCustomerRequest)->send();
-        // // $test1 = (new GetCustomerRequest)->send();
-        // // $test2 = (new GetCustomerRequest)->send();
-        // $data = $test->json();
-        // return $data;
-
-        // $client = new \GuzzleHttp\Client([
-		// 	'base_uri' => 'http://apicrud.test'
-		// ]);
-        // $response  = $client->request('GET', '/api/customer_list');
-        // $decode = json_decode($response->getBody());
-        // dd($decode);
-
-    }
 }
