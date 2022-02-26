@@ -6,10 +6,16 @@ use App\Http\Integrations\api\Requests\GetCustomerRequest;
 use App\Http\Integrations\api\Requests\AddCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-
+use Validator;
 
 class CustomerController extends Controller
 {
+    private $gender = [
+        1 => 'Male',
+        2 => 'Female',
+        3 => 'Others'
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -18,6 +24,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::latest()->get();
+
         return $customers;
     }
 
@@ -39,18 +46,28 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name'  => 'required',
-            'birthdate'  => 'required',
+            'birthdate'  => 'required|date_format:Y-m-d',
             'gender'     => 'required|numeric|min:1|max:3'
         ]);
 
+
+        if ($validated->fails()) {
+            return response()->json([
+                'status_code' => '0',
+                'status_message' => $validated->messages()->first()
+            ]);
+        }
+
+        $data = $validated->validated();
+
         $added_customer = Customer::insert([
-            'first_name' => $validated['first_name'],
-            'last_name'  => $validated['last_name'],
-            'birthdate'  => $validated['birthdate'],
-            'gender'     => $validated['gender']
+            'first_name' => $data['first_name'],
+            'last_name'  => $data['last_name'],
+            'birthdate'  => $data['birthdate'],
+            'gender'     => $data['gender']
         ]);
 
         ///or simply this query
@@ -74,11 +91,21 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
+        //array to change the output of integer gender to text
+        $customer_details = [
+            'id'         => $customer->id,
+            'first_name' => $customer->first_name,
+            'last_name'  => $customer->last_name,
+            'birthdate'  => $customer->birthdate,
+            'gender'     => $this->gender[$customer->gender]
+        ];
+
         return response()->json([
             'status_code'    => '1',
             'status_message' => 'Success',
-            'customer'       => $customer
+            'customer'       => $customer_details
         ]);
+
     }
 
     /**
@@ -102,18 +129,43 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
 
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
+            'first_name' => 'alpha',
+            'last_name'  => 'alpha',
+            'birthdate'  => 'date_format:Y-m-d',
             'gender'     => 'numeric|min:1|max:3'
         ]);
 
-        if($customer->update($validated)){
+
+        if ($validated->fails()) {
+            return response()->json([
+                'status_code' => '0',
+                'status_message' => $validated->messages()->first()
+            ]);
+        }
+
+        $data = $validated->validated();
+
+        try {
+            Customer::find($customer->id)->update([
+                'first_name' => $request->first_name ? $data['first_name'] : $customer->first_name,
+                'last_name'  => $request->last_name ? $data['last_name'] : $customer->last_name,
+                'birthdate'  => $request->birthdate ? $data['birthdate'] : $customer->birthdate,
+                'gender'     => $request->gender ? $data['gender'] : $customer->gender,
+            ]);
+
             return response()->json([
                 'status_code'    => '1',
                 'status_message' => 'Successfully Updated',
                 'customer'       => $customer
             ]);
-        }
 
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status_code' => '0',
+                'status_code' => $th->getMessage()
+            ]);
+        }
     }
 
     /**

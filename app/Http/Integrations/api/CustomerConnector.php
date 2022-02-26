@@ -24,8 +24,7 @@ class CustomerConnector extends SaloonConnector
      */
 
     protected array $requests = [
-        'get_key' => GetCustomerRequest::class,
-        'add_key' => AddCustomerRequest::class,
+
     ];
 
     /**

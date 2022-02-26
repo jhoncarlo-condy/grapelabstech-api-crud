@@ -32,4 +32,7 @@ Route::middleware('jwt.auth')->resource('customers',CustomerController::class);
 
 //test api for saloon
 Route::get('customer_list',[SaloonController::class,'customer_list']);
-Route::get('add_customer',[SaloonController::class,'add_customer']);
+Route::get('view_customer_details',[SaloonController::class,'view_customer_details']);
+Route::put('update_customer',[SaloonController::class,'update_customer']);
+Route::post('add_customer',[SaloonController::class,'add_customer']);
+Route::delete('delete_customer',[SaloonController::class,'delete_customer']);
