@@ -137,45 +137,50 @@ class CustomerController extends Controller
 
     public function customer_list(){
         $customers = Customer::latest()->get();
-        return response()->json([
-            'status_code'    => '1',
-            'status_message' => 'Success',
-            'customers'      => $customers
-        ],200);
+
+        return response()->json($customers,200);
     }
 
     public function sample(){
         // return 'test';
         // $connector = new CustomerConnector();
-        // $request = $connector->getCustomerRequest();
+        // $request = $connector->get_key();
         // $response = $request->send();
-        // $response->throw();
+        // // $response->throw();
         // $data = $response->json();
         // return $data;
 
 
-        //
-        // $request = CustomerConnector::GetCustomerResponse();
+
+        // $request = CustomerConnector::get_key();
         // $response = $request->send();
-        // $response->throw();
+        // // $response->throw();
         // $data = $response->json();
         // return $data;
 
         //
+        // $request  = new GetCustomerRequest();
+        // // dd($request);
+        // $response = $request->send();
+        // // $response->throw();
+        // $data     = $response->json();
+        // return $data;
+
         $request = new GetCustomerRequest();
         $response = $request->send();
-        $data = $response->json();
+        $data     = $response->json();
         return $data;
 
-        //
         // $response = (new GetCustomerRequest)->connectorMethod()->send();
         // $data = $response->json();
         // return $data;
 
         // $response = (new GetCustomerRequest)->send();
-        // $response->throw();
-        // $data = $response->json();
+        // // $response->throw();
+        // $response->getGuzzleException();
+        // $data = json_decode($response->json());
         // return $data;
+
 
         // Saloon::fake([
         //     new MockResponse(['name' => 'Sam'], 200),
@@ -184,10 +189,17 @@ class CustomerController extends Controller
         // ]);
 
         // $test  = (new GetCustomerRequest)->send();
-        // $test1 = (new GetCustomerRequest)->send();
-        // $test2 = (new GetCustomerRequest)->send();
-
+        // // $test1 = (new GetCustomerRequest)->send();
+        // // $test2 = (new GetCustomerRequest)->send();
         // $data = $test->json();
         // return $data;
+
+        // $client = new \GuzzleHttp\Client([
+		// 	'base_uri' => 'http://apicrud.test'
+		// ]);
+        // $response  = $client->request('GET', '/api/customer_list');
+        // $decode = json_decode($response->getBody());
+        // dd($decode);
+
     }
 }

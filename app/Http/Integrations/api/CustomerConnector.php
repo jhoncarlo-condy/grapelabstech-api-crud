@@ -3,12 +3,15 @@
 namespace App\Http\Integrations\api;
 
 use App\Http\Integrations\api\Requests\GetCustomerRequest;
+use App\Http\Integrations\api\Responses\CustomerResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+use Sammyjo20\Saloon\Traits\Features\DisablesSSLVerification;
 
 class CustomerConnector extends SaloonConnector
 {
     // use AcceptsJson;
+    use DisablesSSLVerification;
 
 
     /**
@@ -17,7 +20,10 @@ class CustomerConnector extends SaloonConnector
      *
      * @var array
      */
-    protected array $requests = [];
+
+    protected array $requests = [
+        'get_key' => GetCustomerRequest::class,
+    ];
 
     /**
      * Define the base url of the api.
@@ -26,7 +32,8 @@ class CustomerConnector extends SaloonConnector
      */
     public function defineBaseUrl(): string
     {
-        return 'http://127.0.0.1:8000';
+        // return 'https://jsonplaceholder.typicode.com';
+        return 'http://apicrud.test/';
     }
 
     /**
